@@ -8,6 +8,10 @@ const baseUrl = "https://apicapstonejson.herokuapp.com";
 const saveToken = (token) => {
   localStorage.setItem("token", JSON.stringify(token));
 };
+//save id in localStorage
+const saveId = (id) => {
+  localStorage.setItem("id", JSON.stringify(id));
+};
 
 export const loginUser = (data) =>
   axios({
@@ -18,6 +22,7 @@ export const loginUser = (data) =>
     .then((resp) => {
       toast.success("Usuário Logado com sucesso");
       saveToken(resp.data.accessToken);
+      saveId(resp.data.id);
     })
     .catch((error) => toast.error(error.response.data));
 
@@ -39,3 +44,11 @@ export const registerUser = (data) =>
       }
       return err;
     });
+
+export const editUser = (data, id) => {
+  axios({
+    url: `${baseUrl}/register/${id}`,
+    method: "PATCH",
+    data: data,
+  });
+};
