@@ -2,10 +2,12 @@ import { Container, LoginForm } from "./style";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { loginUser } from "../../services/FakeApi";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginAsync } from "../../store/userSlice/userSlice";
 
 function LoginHospital() {
+  const dispatch = useDispatch();
   const schema = yup
     .object({
       email: yup.string().required("Digite seu e-mail").email("email inválido"),
@@ -20,7 +22,7 @@ function LoginHospital() {
     resolver: yupResolver(schema),
   });
   const onSubmit = (data) => {
-    loginUser(data);
+    dispatch(loginAsync(data));
   };
 
   const history = useHistory();
@@ -68,7 +70,14 @@ function LoginHospital() {
         <section className="buttonSection">
           <button type="submit">Entrar</button>
           <span onClick={goToRegisterPage}>Não possui cadastro?</span>
-          <span onClick={()=>{ history.push("/")}} className="voltar" >Voltar</span>
+          <span
+            onClick={() => {
+              history.push("/");
+            }}
+            className="voltar"
+          >
+            Voltar
+          </span>
         </section>
       </LoginForm>
     </Container>

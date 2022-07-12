@@ -4,8 +4,16 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import jwtDecode from "jwt-decode";
+import { updateUserAsync } from "../../store/userSlice/userSlice";
 
 function EditUser() {
+  const userData = useSelector((state) => state.user);
+  console.log(userData);
+  const dispatch = useDispatch();
+  const userTokenData = jwtDecode(localStorage.getItem("token"));
+
   const formSchema = yup.object().shape({
     name: yup.string().required("Este campo é obrigatório"),
     dataNacimento: yup
@@ -57,7 +65,7 @@ function EditUser() {
   });
 
   const handleChange = (data) => {
-    console.log(data);
+    dispatch(updateUserAsync(data, userTokenData.sub));
   };
 
   return (

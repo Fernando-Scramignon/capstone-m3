@@ -2,10 +2,12 @@ import { useForm } from "react-hook-form";
 import { Container, Content } from "./style";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { loginUser } from "../../services/FakeApi";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginAsync } from "../../store/userSlice/userSlice";
 
 function LoginUser() {
+  const dispatch = useDispatch();
   const schema = yup
     .object({
       email: yup.string().required("Digite seu e-mail").email("email inválido"),
@@ -20,8 +22,7 @@ function LoginUser() {
     resolver: yupResolver(schema),
   });
   const onSubmit = (data) => {
-    console.log(data);
-    loginUser(data);
+    dispatch(loginAsync(data));
   };
 
   const history = useHistory();
@@ -59,7 +60,12 @@ function LoginUser() {
           </div>
           <button type="submit">Entrar</button>
           <span onClick={goToRegisterPage}>Não possui uma conta?</span>
-          <span onClick={()=>{history.push("/")}} className="voltar">
+          <span
+            onClick={() => {
+              history.push("/");
+            }}
+            className="voltar"
+          >
             Voltar
           </span>
         </form>

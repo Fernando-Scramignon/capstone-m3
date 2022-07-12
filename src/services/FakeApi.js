@@ -5,26 +5,21 @@ import { toast } from "react-toastify";
 const baseUrl = "https://apicapstonejson.herokuapp.com";
 
 //save token in localStorage
-const saveToken = (token) => {
+export const saveToken = (token) => {
   localStorage.setItem("token", JSON.stringify(token));
 };
 //save id in localStorage
-const saveId = (id) => {
+export const saveId = (id) => {
   localStorage.setItem("id", JSON.stringify(id));
 };
 
-export const loginUser = (data) =>
+export const getUserProfile = (id) => {
   axios({
-    url: `${baseUrl}/login`,
-    method: "POST",
-    data: data,
-  })
-    .then((resp) => {
-      toast.success("Usuário Logado com sucesso");
-      saveToken(resp.data.accessToken);
-      saveId(resp.data.id);
-    })
-    .catch((error) => toast.error(error.response.data));
+    url: `${baseUrl}/users/${id}`,
+    method: "GET",
+    headers: { authorization: localStorage.getItem("token") },
+  }).then((resp) => console.log(resp));
+};
 
 export const registerUser = (data) =>
   axios({
